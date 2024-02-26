@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="240dp"
+        android:layout_height="240dp"/>
+
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
