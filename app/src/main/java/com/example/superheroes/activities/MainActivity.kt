@@ -2,9 +2,14 @@ package com.example.superheroes.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.superheroes.R
 import com.example.superheroes.adapters.SuperheroAdapter
 import com.example.superheroes.data.SuperheroesResponse
 import com.example.superheroes.data.SuperheroesServiceApi
@@ -29,14 +34,40 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searchButton.setOnClickListener {
+        /*binding.searchButton.setOnClickListener {
             val searchText = binding.searchEditText.text.toString()
             searchSuperheroes(searchText)
-        }
+        }*/
 
         adapter = SuperheroAdapter()
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        initSearchView(menu?.findItem(R.id.menu_search))
+
+        return true
+    }
+
+    private fun initSearchView(searchItem: MenuItem?) {
+        if (searchItem != null) {
+            var searchView = searchItem.actionView as SearchView
+
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    searchSuperheroes(query!!)
+                    return true
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    return false
+                }
+            })
+        }
     }
 
     private fun searchSuperheroes(query: String) {
@@ -53,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
             runOnUiThread {
                 // Modificar UI
-                if (response != null) {
+                if (response.body() != null) {
                     Log.i("HTTP", "respuesta correcta :)")
                     adapter.updateItems(response.body()?.results)
                 } else {
