@@ -11,7 +11,14 @@ class SuperheroesResponse (
 
 class Superhero (
     @SerializedName("id") val id:String,
-    @SerializedName("name") val name:String
+    @SerializedName("name") val name:String,
+    @SerializedName("image") val image:Image
+) {
+
+}
+
+class Image (
+    @SerializedName("url") val url:String
 ) {
 
 }
