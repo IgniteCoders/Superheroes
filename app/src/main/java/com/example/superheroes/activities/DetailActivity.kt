@@ -10,6 +10,8 @@ import com.example.superheroes.R
 import com.example.superheroes.data.Superhero
 import com.example.superheroes.data.SuperheroesServiceApi
 import com.example.superheroes.databinding.ActivityDetailBinding
+import com.example.superheroes.utils.Constants
+import com.example.superheroes.utils.RetrofitProvider
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -73,12 +75,7 @@ class DetailActivity : AppCompatActivity() {
     private fun findSuperheroById(id: String) {
         //binding.progress.visibility = View.VISIBLE
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://superheroapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service: SuperheroesServiceApi = retrofit.create(SuperheroesServiceApi::class.java)
+        val service: SuperheroesServiceApi = RetrofitProvider.getRetrofit()
 
         CoroutineScope(Dispatchers.IO).launch {
             // Llamada en segundo plano

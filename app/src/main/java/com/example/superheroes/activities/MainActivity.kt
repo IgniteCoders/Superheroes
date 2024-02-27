@@ -16,6 +16,8 @@ import com.example.superheroes.data.Superhero
 import com.example.superheroes.data.SuperheroesResponse
 import com.example.superheroes.data.SuperheroesServiceApi
 import com.example.superheroes.databinding.ActivityMainBinding
+import com.example.superheroes.utils.Constants
+import com.example.superheroes.utils.RetrofitProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,12 +95,7 @@ class MainActivity : AppCompatActivity() {
     private fun searchSuperheroes(query: String) {
         binding.progress.visibility = View.VISIBLE
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://superheroapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service: SuperheroesServiceApi = retrofit.create(SuperheroesServiceApi::class.java)
+        val service: SuperheroesServiceApi = RetrofitProvider.getRetrofit()
 
         CoroutineScope(Dispatchers.IO).launch {
             // Llamada en segundo plano

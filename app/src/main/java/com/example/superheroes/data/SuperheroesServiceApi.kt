@@ -6,9 +6,9 @@ import retrofit2.http.Path
 
 interface SuperheroesServiceApi {
 
-    @GET("api/7252591128153666/search/{name}")
+    @GET("search/{name}")
     suspend fun searchByName(@Path("name") query:String) : Response<SuperheroesResponse>
 
-    @GET("api/7252591128153666/{id}")
+    @GET("{id}")
     suspend fun findById(@Path("id") identifier:String) : Response<Superhero>
 }
