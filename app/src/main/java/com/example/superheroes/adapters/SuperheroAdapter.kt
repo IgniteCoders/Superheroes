@@ -24,8 +24,8 @@ class SuperheroAdapter(private var items:List<Superhero> = listOf()) : RecyclerV
         //holder.itemView.setOnClickListener { onClickListener(position) }
     }
 
-    fun updateItems(results: List<Superhero>?) {
-        items = results!!
+    fun updateItems(results: List<Superhero>) {
+        items = results
         notifyDataSetChanged()
     }
 }

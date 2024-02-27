@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.superheroes.R
 import com.example.superheroes.adapters.SuperheroAdapter
+import com.example.superheroes.data.Superhero
 import com.example.superheroes.data.SuperheroesResponse
 import com.example.superheroes.data.SuperheroesServiceApi
 import com.example.superheroes.databinding.ActivityMainBinding
@@ -42,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         adapter = SuperheroAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+
+        binding.progress.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
+        binding.emptyPlaceholder.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -71,6 +76,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun searchSuperheroes(query: String) {
+        binding.progress.visibility = View.VISIBLE
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://superheroapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -84,9 +91,18 @@ class MainActivity : AppCompatActivity() {
 
             runOnUiThread {
                 // Modificar UI
+                binding.progress.visibility = View.GONE
                 if (response.body() != null) {
                     Log.i("HTTP", "respuesta correcta :)")
-                    adapter.updateItems(response.body()?.results)
+                    val results: List<Superhero>? = response.body()?.results
+                    adapter.updateItems(results.orEmpty())
+                    if (!results.isNullOrEmpty()) {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.emptyPlaceholder.visibility = View.GONE
+                    } else {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.emptyPlaceholder.visibility = View.VISIBLE
+                    }
                 } else {
                     Log.i("HTTP", "respuesta erronea :(")
                 }
