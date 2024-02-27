@@ -1,5 +1,6 @@
 package com.example.superheroes.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: SuperheroAdapter
+    private var superheroList:List<Superhero> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,9 @@ class MainActivity : AppCompatActivity() {
             searchSuperheroes(searchText)
         }*/
 
-        adapter = SuperheroAdapter()
+        adapter = SuperheroAdapter() {
+            onItemClickListener(it)
+        }
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 
@@ -75,6 +79,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onItemClickListener(position:Int) {
+        val superhero: Superhero = superheroList[position]
+
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_ID, superhero.id)
+        intent.putExtra(DetailActivity.EXTRA_NAME, superhero.name)
+        intent.putExtra(DetailActivity.EXTRA_IMAGE, superhero.image.url)
+        startActivity(intent)
+        //Toast.makeText(this, getString(horoscope.name), Toast.LENGTH_LONG).show()
+    }
+
     private fun searchSuperheroes(query: String) {
         binding.progress.visibility = View.VISIBLE
 
@@ -92,11 +107,13 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 // Modificar UI
                 binding.progress.visibility = View.GONE
+
                 if (response.body() != null) {
                     Log.i("HTTP", "respuesta correcta :)")
-                    val results: List<Superhero>? = response.body()?.results
-                    adapter.updateItems(results.orEmpty())
-                    if (!results.isNullOrEmpty()) {
+                    superheroList = response.body()?.results.orEmpty()
+                    adapter.updateItems(superheroList)
+
+                    if (superheroList.isNotEmpty()) {
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.emptyPlaceholder.visibility = View.GONE
                     } else {
