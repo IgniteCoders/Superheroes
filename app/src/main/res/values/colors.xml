@@ -10,4 +10,16 @@
 
     <color name="card_title_background">#808C8C8C</color>
     <color name="grey">#8C8C8C</color>
+
+    <!-- Stats colors -->
+    <color name="intelligence_color">#00BCD4</color>
+    <color name="strength_color">#4CAF50</color>
+    <color name="speed_color">#3F51B5</color>
+    <color name="durability_color">#FF9800</color>
+    <color name="power_color">#CB00FF</color>
+    <color name="combat_color">#FF0000</color>
+
+    <!-- Alignment colors -->
+    <color name="good_color">#4CAF50</color>
+    <color name="evil_color">#F44336</color>
 </resources>

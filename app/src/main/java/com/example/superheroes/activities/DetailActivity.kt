@@ -62,6 +62,34 @@ class DetailActivity : AppCompatActivity() {
         //collapsingToolbar.title = "Your Title"
     }
 
+    private fun loadData () {
+        binding.toolbarLayout.title = superhero.name
+
+        // Biography
+        binding.content.realNameTextView.text = superhero.biography.realName
+        binding.content.publisherTextView.text = superhero.biography.publisher
+        binding.content.placeOfBirthTextView.text = superhero.biography.placeOfBirth
+        binding.content.alignmentTextView.text = superhero.biography.alignment.uppercase()
+        val alignmentColor = if (superhero.biography.alignment == "good") {
+            R.color.good_color
+        } else {
+            R.color.evil_color
+        }
+        binding.content.alignmentTextView.setTextColor(getColor(alignmentColor))
+
+        // Work
+        binding.content.occupationTextView.text = superhero.work.occupation
+        binding.content.baseTextView.text = superhero.work.base
+
+        // Stats
+        binding.content.intelligenceStatBar.progress = superhero.stats.intelligence
+        binding.content.strengthStatBar.progress = superhero.stats.strength
+        binding.content.speedStatBar.progress = superhero.stats.speed
+        binding.content.durabilityStatBar.progress = superhero.stats.durability
+        binding.content.powerStatBar.progress = superhero.stats.power
+        binding.content.combatStatBar.progress = superhero.stats.combat
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -73,7 +101,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun findSuperheroById(id: String) {
-        //binding.progress.visibility = View.VISIBLE
+        binding.content.progress.visibility = View.VISIBLE
 
         val service: SuperheroesServiceApi = RetrofitProvider.getRetrofit()
 
@@ -83,11 +111,11 @@ class DetailActivity : AppCompatActivity() {
 
             runOnUiThread {
                 // Modificar UI
-                //binding.progress.visibility = View.GONE
+                binding.content.progress.visibility = View.GONE
                 if (response.body() != null) {
                     Log.i("HTTP", "respuesta correcta :)")
                     superhero = response.body()!!
-                    binding.toolbarLayout.title = superhero.name
+                    loadData()
                 } else {
                     Log.i("HTTP", "respuesta erronea :(")
                 }

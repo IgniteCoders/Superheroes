@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     searchSuperheroes(query!!)
+                    searchView.clearFocus()
                     return true
                 }
 
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.i("HTTP", "respuesta erronea :(")
+                    Toast.makeText(this@MainActivity, "Hubo un error inesperado, vuelva a intentarlo más tarde", Toast.LENGTH_LONG).show()
                 }
             }
         }
